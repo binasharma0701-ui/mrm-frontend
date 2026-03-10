@@ -1,0 +1,53 @@
+/* Responsive Breakpoints */
+/* Mobile: 320px - 640px */
+/* Tablet: 641px - 1024px */
+/* Desktop: 1025px+ */
+
+@media (max-width: 640px) {
+  .main-content {
+    padding-top: 70px;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Utility Classes */
+.show-mobile { display: none; }
+.show-tablet { display: none; }
+.show-desktop { display: none; }
+
+@media (max-width: 640px) {
+  .show-mobile { display: block; }
+  .show-mobile.flex { display: flex; }
+  .show-mobile.flex-center { display: flex; align-items: center; justify-content: center; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .show-tablet { display: block; }
+  .show-tablet.flex { display: flex; }
+  .show-tablet.flex-center { display: flex; align-items: center; justify-content: center; }
+}
+
+@media (min-width: 1025px) {
+  .show-desktop { display: block; }
+  .show-desktop.flex { display: flex; }
+  .show-desktop.flex-center { display: flex; align-items: center; justify-content: center; }
+}

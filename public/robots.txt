@@ -1,0 +1,16 @@
+# Robots.txt
+# Allow all bots
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://mrmidols.com/sitemap.xml
+
+# Specific rules
+Disallow: /admin/
+Disallow: /api/
+Disallow: /admin-panel/
+
+# Crawl delays
+Crawl-delay: 1

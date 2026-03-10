@@ -1,0 +1,66 @@
+/* Mock Products Data */
+export const mockProducts = [
+  {
+    id: 1,
+    name: 'Krishna Idol - Pure Marble',
+    slug: 'krishna-idol-pure-marble',
+    price: 5000,
+    originalPrice: 6000,
+    image: '/images/products/krishna-marble.jpg',
+    collection: 'marble',
+    description: 'Exquisite pure marble Krishna idol hand-carved by skilled artisans',
+    rating: 4.8,
+    reviews: 45,
+  },
+  {
+    id: 2,
+    name: 'Durga Idol - Dust Murties',
+    slug: 'durga-idol-dust-murties',
+    price: 3000,
+    originalPrice: 3500,
+    image: '/images/products/durga-dust.jpg',
+    collection: 'dust',
+    description: 'Beautiful dust murties Durga idol for home temple',
+    rating: 4.6,
+    reviews: 32,
+  },
+  {
+    id: 3,
+    name: 'Radha-Krishna - Poshak & Sringar',
+    slug: 'radha-krishna-poshak-sringar',
+    price: 7000,
+    originalPrice: 8500,
+    image: '/images/products/radha-krishna-poshak.jpg',
+    collection: 'poshak',
+    description: 'Elegantly dressed Radha-Krishna idol with divine poshak and jewelry',
+    rating: 5,
+    reviews: 56,
+  },
+]
+
+export const mockCollections = [
+  {
+    id: 1,
+    name: 'Pure Marble Collection',
+    slug: 'pure-marble-collection',
+    description: 'Handcrafted pure marble idols',
+    image: '/images/collections/marble.jpg',
+    productCount: 15,
+  },
+  {
+    id: 2,
+    name: 'Poshak & Sringar Collection',
+    slug: 'poshak-sringar-collection',
+    description: 'Idols with traditional poshak and ornaments',
+    image: '/images/collections/poshak.jpg',
+    productCount: 12,
+  },
+  {
+    id: 3,
+    name: 'Dust Murties Collection',
+    slug: 'dust-murties-collection',
+    description: 'Dust clay idols for modern homes',
+    image: '/images/collections/dust.jpg',
+    productCount: 20,
+  },
+]

@@ -1,0 +1,12 @@
+/* Custom overrides for Cart styling (Tailwind handles most) */
+.cart-page {
+    background-color: var(--color-bg-light);
+}
+
+.cart-item {
+    transition: background-color 0.2s ease;
+}
+
+.cart-item:hover {
+    background-color: #fcfcfc;
+}

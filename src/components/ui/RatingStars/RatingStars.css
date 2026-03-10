@@ -1,0 +1,33 @@
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars-container {
+  display: flex;
+  position: relative;
+}
+
+.star-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.star-svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.star-wrapper:hover .star-svg {
+  transform: scale(1.1);
+}
+
+.rating-text {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 500;
+}

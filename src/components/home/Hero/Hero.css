@@ -1,0 +1,237 @@
+.hero {
+  background: var(--color-bg);
+  padding: 0 var(--spacing-xl);
+  margin-bottom: var(--spacing-3xl);
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3xl);
+  align-items: center;
+  min-height: 80vh;
+}
+
+.hero-text {
+  animation: slideInLeft 3s ease;
+}
+
+.hero-title {
+  font-family: var(--font-secondary);
+  font-size: 4.5rem;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-lg);
+  color: #3f1931;
+  /* Deep burgundy/purple for Bring Home */
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f4ecd8;
+  color: var(--color-text);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-left: 15px;
+  vertical-align: middle;
+  width: fit-content;
+  animation: sparkle 3s infinite ease-in-out;
+  border: 1px solid #eb9c5e;
+}
+
+@keyframes sparkle {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(235, 156, 94, 0);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(235, 156, 94, 0.4);
+    background: #fff4e0;
+  }
+}
+
+.hero-title-highlight {
+  color: #eb9c5e;
+  /* Orange/Gold for Divine Blessings */
+  font-weight: 500;
+}
+
+.hero-text p {
+  font-size: 1.1rem;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2xl);
+  line-height: 1.6;
+  max-width: 90%;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+}
+
+
+.btn-primary {
+  background: #000;
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--color-white);
+  color: #000;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+  background: #f9f9f9;
+  transform: translateY(-2px);
+}
+
+.hero-features {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--fs-sm);
+  color: var(--color-text-light);
+}
+
+.feature span {
+  font-size: var(--fs-xl);
+}
+
+.hero-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  animation: slideInRight 3s ease;
+  padding-top: 4rem;
+}
+
+.hero-arch {
+  position: absolute;
+  bottom: -50px;
+  /* Slight overflow at the bottom */
+  width: 90%;
+  max-width: 500px;
+  height: 110%;
+  /* Taller than container for the arch */
+  background-color: #e2bd80;
+  border-radius: 250px 250px 0 0;
+  z-index: 0;
+  border: 1px solid #d4a574;
+  overflow: hidden;
+}
+
+.hero-idol-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 1;
+}
+
+.hero-idol-img.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: var(--spacing-md) var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-content {
+    gap: var(--spacing-lg);
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-text p {
+    font-size: var(--fs-base);
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+  }
+
+  .hero-features {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}

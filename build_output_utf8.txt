@@ -1,0 +1,62 @@
+﻿
+> mrm-idols-frontend@1.0.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 124 modules transformed.
+node.exe : [31mx[39m 
+Build failed in 2.13s
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: ([31mx[39m B   
+ uild failed in 2.1    
+3s:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+[31merror during 
+build:
+[31m[vite:terser] 
+terser not found. 
+Since Vite v3, terser 
+has become an optional 
+dependency. You need 
+to install it.[31m
+    at loadTerserPath (
+file:///C:/Users/NAVART
+AN%20SHARMA/Desktop/per
+sonal/mrm-idols-fronten
+d/node_modules/vite/dis
+t/node/chunks/dep-BK3b2
+jBa.js:19705:13)
+    at 
+Object.renderChunk (fil
+e:///C:/Users/NAVARTAN%
+20SHARMA/Desktop/person
+al/mrm-idols-frontend/n
+ode_modules/vite/dist/n
+ode/chunks/dep-BK3b2jBa
+.js:19740:27)
+    at file:///C:/Users
+/NAVARTAN%20SHARMA/Desk
+top/personal/mrm-idols-
+frontend/node_modules/r
+ollup/dist/es/shared/no
+de-entry.js:22571:40
+    at process.processT
+icksAndRejections (node
+:internal/process/task_
+queues:103:5)[39m
