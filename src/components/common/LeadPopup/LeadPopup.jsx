@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import { FiX, FiUser, FiPhone, FiChevronRight } from 'react-icons/fi';
 import './LeadPopup.css';
 
@@ -33,16 +33,19 @@ const LeadPopup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.name || !formData.phone) return;
+        if (!formData.name || !formData.phone) {
+            alert('Please enter both your name and phone number.');
+            return;
+        }
 
         try {
             setLoading(true);
             const deviceType = getDeviceType();
 
             // We use the full API URL here since we're on the frontend
-            // Assuming backend is at http://localhost:3001
-            await axios.post('http://localhost:3001/api/visitors', {
-                ...formData,
+            // Send to live backend using axiosInstance
+            await axiosInstance.post('/visitors', {
+                ...formData, // Keep existing form data (name, phone)
                 deviceType,
                 browser: navigator.userAgent.split(') ')[1] || 'Unknown',
                 os: navigator.platform

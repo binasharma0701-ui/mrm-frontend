@@ -39,7 +39,12 @@ export const getImageUrl = (path) => {
   const cleanPath = normalizedPath.startsWith('/') ? normalizedPath.substring(1) : normalizedPath;
 
   // Use dynamic image host identical to API
-  const baseUrl = config.IMAGE_CDN_URL || `http://${window.location.hostname}:3001`;
+  let baseUrl = config.IMAGE_CDN_URL;
+
+  if (!baseUrl) {
+    // Extract base URL from API_BASE_URL (remove /api if present)
+    baseUrl = config.API_BASE_URL.replace(/\/api\/?$/, '');
+  }
 
   // Ensure the base URL doesn't end with a slash, then append the path
   return `${baseUrl.replace(/\/$/, '')}/${cleanPath}`;

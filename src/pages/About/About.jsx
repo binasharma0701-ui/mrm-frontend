@@ -14,7 +14,8 @@ export default function About() {
 
   const fetchAboutUsData = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || `http://${window.location.hostname}:3001/api`;
+      const apiUrl = apiBaseUrl.replace(/\/api\/?$/, '');
       const res = await fetch(`${apiUrl}/api/aboutus`);
       if (res.ok) {
         const data = await res.json();
@@ -30,7 +31,8 @@ export default function About() {
   const getImageUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || `http://${window.location.hostname}:3001/api`;
+    const apiUrl = apiBaseUrl.replace(/\/api\/?$/, '');
     return `${apiUrl}${path}`;
   };
 
