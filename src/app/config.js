@@ -1,9 +1,20 @@
 // Use environment variable in production, but dynamically detect local IP in dev
 const getNetworkBaseUrl = () => {
-  if (import.meta.env.PROD && import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
+  // 1. Check process.env/import.meta.env
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+
+  // 2. If it's a real full URL, use it
+  if (envUrl && envUrl.startsWith('http')) {
+    return envUrl;
   }
-  // Fallback to the current window's hostname on port 3001 if local network
+
+  // 3. Failsafe for Vercel
+  if (window.location.hostname.includes('vercel.app')) {
+    console.log('Vercel detected, using Render fallback: https://mrm-backend-ozmj.onrender.com/api');
+    return 'https://mrm-backend-ozmj.onrender.com/api';
+  }
+
+  // 4. Local dev fallback
   return `http://${window.location.hostname}:3001/api`;
 }
 

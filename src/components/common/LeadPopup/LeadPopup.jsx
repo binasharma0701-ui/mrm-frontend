@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from '../../../api/axiosInstance';
 import { FiX, FiUser, FiPhone, FiChevronRight } from 'react-icons/fi';
 import './LeadPopup.css';
 
