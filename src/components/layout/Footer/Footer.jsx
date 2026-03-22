@@ -41,7 +41,9 @@ export default function Footer() {
         <div className="footer-section">
           <h3>Contact Us</h3>
           <ul>
-            <li><a href="tel:+916367929608">Phone : + 91 6367929608</a></li>
+            <li><a href="tel:+916367929608">Phone : +91 6367929608</a></li>
+            <li><a href="tel:+917742907042">Mobile : +91 7742907042</a></li>
+            <li><a href="tel:+919460385222">Mobile : +91 9460385222</a></li>
             <li><a href="mailto:info@mrmidols.com">Email : info@mrmidols.com</a></li>
             <li>
               <a
