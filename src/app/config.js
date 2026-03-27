@@ -28,35 +28,50 @@ export const config = {
   ENABLE_WISHLIST: import.meta.env.VITE_ENABLE_WISHLIST === 'true',
 };
 
-export const getImageUrl = (path) => {
-  if (!path || typeof path !== 'string') return '';
+// Inject Cloudinary auto-optimization (format, quality, width) into a Cloudinary URL
+const applyCloudinaryOptimizations = (url, width = 600) => {
+  if (!url || !url.includes('res.cloudinary.com')) return url;
+  // Insert transformation after /upload/
+  return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width}/`);
+};
+
+export const getImageUrl = (path, width = 600) => {
+  if (!path || typeof path !== 'string') return '/images/placeholder.png'; // Use a real placeholder
 
   // Normalize windows backslashes to forward slashes
   const normalizedPath = path.replace(/\\/g, '/');
 
+  // 1. If it's already a full URL (Cloudinary), use it immediately
   if (normalizedPath.startsWith('http://') || normalizedPath.startsWith('https://')) {
-    return normalizedPath;
+    return applyCloudinaryOptimizations(normalizedPath, width);
   }
 
-  // If the path is a local static frontend asset, return it as-is
-  if (normalizedPath.startsWith('/images/')) {
-    return normalizedPath;
-  }
-  if (normalizedPath.startsWith('images/')) {
-    return `/${normalizedPath}`;
+  // 2. If it's a local static frontend asset, return it
+  if (normalizedPath.startsWith('/images/') || normalizedPath.startsWith('images/')) {
+    return normalizedPath.startsWith('/') ? normalizedPath : `/${normalizedPath}`;
   }
 
-  // Remove leading slash if present
+  // 3. INTERNAL CHECK: If we are in production (Vercel) but the path is local (uploads/...)
+  // This means the image was not uploaded to Cloudinary and will be BROKEN.
+  const isLocalPath = normalizedPath.includes('uploads/');
+  const isProduction = window.location.hostname.includes('vercel.app') || 
+                       window.location.hostname.includes('onrender.com');
+
+  if (isProduction && isLocalPath) {
+    console.warn(`🕒 LEGACY IMAGE DETECTED: "${normalizedPath}" is a local file. ` + 
+                 `On Render/Vercel, local files are NOT permanent. Please re-upload this item in the CRM.`);
+    // Fallback to a placeholder so the UI doesn't look broken
+    return 'https://placehold.co/600x400/f3f4f6/d4a574?text=Please+Re-upload+Image';
+  }
+
+  // 4. Handle relative paths (e.g. "uploads/image.jpg")
   const cleanPath = normalizedPath.startsWith('/') ? normalizedPath.substring(1) : normalizedPath;
 
-  // Use dynamic image host identical to API
   let baseUrl = config.IMAGE_CDN_URL;
-
   if (!baseUrl) {
-    // Extract base URL from API_BASE_URL (remove /api if present)
     baseUrl = config.API_BASE_URL.replace(/\/api\/?$/, '');
   }
 
-  // Ensure the base URL doesn't end with a slash, then append the path
-  return `${baseUrl.replace(/\/$/, '')}/${cleanPath}`;
+  const finalUrl = `${baseUrl.replace(/\/$/, '')}/${cleanPath}`;
+  return applyCloudinaryOptimizations(finalUrl, width);
 };

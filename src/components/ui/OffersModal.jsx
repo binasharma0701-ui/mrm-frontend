@@ -44,67 +44,74 @@ export default function OffersModal({ isOpen, onClose }) {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm transition-opacity" onClick={onClose}>
+        <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-md transition-opacity" onClick={onClose} style={{ zIndex: 'var(--z-modal)' }}>
             <div
-                className="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] flex flex-col transform transition-all"
+                className="relative rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] flex flex-col transform transition-all"
+                style={{ background: 'var(--color-bg-alt)', border: '1px solid var(--color-border)' }}
                 onClick={e => e.stopPropagation()}
             >
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 text-gray-800 flex items-center justify-center transition-colors backdrop-blur-md"
+                    className="absolute top-5 right-5 z-20 w-11 h-11 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center transition-all backdrop-blur-xl group"
+                    style={{ color: 'var(--color-text)' }}
                     title="Close Offers"
                 >
-                    <FiX className="w-5 h-5" />
+                    <FiX className="w-6 h-6 group-hover:rotate-90 transition-transform" />
                 </button>
 
-                <div className="flex-1 overflow-auto bg-gray-50 flex items-center justify-center p-4 min-h-[300px]">
+                <div className="flex-1 flex items-center justify-center p-4 sm:p-12 relative" style={{ background: 'var(--color-bg)', minHeight: '450px' }}>
                     {loading ? (
-                        <div className="flex flex-col items-center text-primary">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-                            <p className="font-semibold animate-pulse">Loading Offers...</p>
+                        <div className="flex flex-col items-center" style={{ color: 'var(--color-primary)' }}>
+                            <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-primary mb-6" style={{ borderColor: 'var(--color-primary)' }}></div>
+                            <p className="font-bold tracking-[0.2em] animate-pulse uppercase text-xs">Awaiting Divine Offers...</p>
                         </div>
                     ) : offers.length === 0 ? (
-                        <div className="text-center p-8">
-                            <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
-                                <span className="text-2xl font-bold font-serif">%</span>
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">No Active Offers</h3>
-                            <p className="text-gray-500">Check back later for exciting new promotions!</p>
+                        <div className="text-center p-6 animate-slide-up">
+                            <div className="text-7xl mb-6 animate-bounce">🏵️</div>
+                            <h3 className="text-2xl font-black mb-2" style={{ color: 'var(--color-text)' }}>No Offers Right Now</h3>
+                            <p className="text-sm opacity-60" style={{ color: 'var(--color-text)' }}>Check back soon! ✨</p>
                         </div>
                     ) : (
-                        <div className="relative w-full h-full flex items-center justify-center">
-                            <img
-                                src={getImageUrl(offers[currentIndex].image)}
-                                alt={`Offer ${currentIndex + 1}`}
-                                className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-sm"
-                            />
+                        <div className="w-full h-full flex items-center justify-center">
+                            <div className="relative animate-float">
+                                <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full animate-divine -z-10"></div>
+                                <img
+                                    src={getImageUrl(offers[currentIndex].image)}
+                                    alt={`Offer ${currentIndex + 1}`}
+                                    className="max-w-full max-h-[65vh] object-contain rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border-8 border-white dark:border-gray-800 transition-all duration-700 hover:scale-[1.02]"
+                                />
+                                
+                                {offers.length > 1 && (
+                                    <div className="absolute -bottom-16 left-0 right-0 flex justify-center gap-4">
+                                        {offers.map((_, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={(e) => { e.stopPropagation(); setCurrentIndex(idx); }}
+                                                className={`h-1.5 rounded-full transition-all duration-700 ${currentIndex === idx ? 'w-12 bg-primary' : 'w-3 bg-gray-300 dark:bg-gray-700 hover:w-6'}`}
+                                                style={{ background: currentIndex === idx ? 'var(--color-primary)' : '' }}
+                                                aria-label={`Go to slide ${idx + 1}`}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
 
                             {offers.length > 1 && (
                                 <>
                                     <button
                                         onClick={handlePrev}
-                                        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/80 hover:bg-white text-primary flex items-center justify-center shadow-lg backdrop-blur-md transition-all transform hover:scale-110"
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-2xl transition-all transform hover:scale-110 active:scale-90 group z-50"
+                                        style={{ color: 'var(--color-primary)' }}
                                     >
-                                        <FiChevronLeft className="w-6 h-6" />
+                                        <FiChevronLeft className="w-8 h-8 sm:w-12 sm:h-12" />
                                     </button>
                                     <button
                                         onClick={handleNext}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/80 hover:bg-white text-primary flex items-center justify-center shadow-lg backdrop-blur-md transition-all transform hover:scale-110"
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-2xl transition-all transform hover:scale-110 active:scale-90 group z-50"
+                                        style={{ color: 'var(--color-primary)' }}
                                     >
-                                        <FiChevronRight className="w-6 h-6" />
+                                        <FiChevronRight className="w-8 h-8 sm:w-12 sm:h-12" />
                                     </button>
-
-                                    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                                        {offers.map((_, idx) => (
-                                            <button
-                                                key={idx}
-                                                onClick={(e) => { e.stopPropagation(); setCurrentIndex(idx); }}
-                                                className={`w-2.5 h-2.5 rounded-full transition-all ${currentIndex === idx ? 'bg-primary w-6' : 'bg-white/50 hover:bg-white/80'
-                                                    }`}
-                                                aria-label={`Go to slide ${idx + 1}`}
-                                            />
-                                        ))}
-                                    </div>
                                 </>
                             )}
                         </div>

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { getImageUrl } from '../../../app/config';
 import axiosInstance from '../../../api/axiosInstance';
 import { useCart } from '../../../context/CartContext.jsx';
 import { useWishlist } from '../../../context/WishlistContext.jsx';
 import RatingStars from '../../ui/RatingStars/RatingStars';
+import ProductSkeleton from '../../ui/ProductSkeleton/ProductSkeleton';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import './FeaturedSection.css'
 
@@ -13,29 +15,16 @@ const ITEMS_PER_PAGE = 5
 export default function FeaturedSection() {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('All')
-  const [featuredProducts, setFeaturedProducts] = useState([])
-  const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
-  useEffect(() => {
-    const fetchFeaturedProducts = async () => {
-      try {
-        setLoading(true)
-        const response = await axiosInstance.get('/products?featured=true')
-        setFeaturedProducts(response.data.data || [])
-      } catch (error) {
-        console.error('Failed to fetch featured products:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchFeaturedProducts()
-
-    const interval = setInterval(fetchFeaturedProducts, 10000)
-    return () => clearInterval(interval)
-  }, [])
+  // Fetch featured products with caching (stale for 2 min)
+  const { data: featuredProducts = [], isLoading: loading } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn: () => axiosInstance.get('/products?featured=true').then(r => r.data.data || []),
+    staleTime: 2 * 60 * 1000,
+  })
 
   // Reset to page 1 when filter changes
   useEffect(() => {
@@ -91,7 +80,7 @@ export default function FeaturedSection() {
 
         <div className="products-grid">
           {loading ? (
-            <div className="flex items-center justify-center p-8">Loading products...</div>
+            <ProductSkeleton count={5} />
           ) : displayedProducts.map(product => (
             <div
               key={product._id || product.id}

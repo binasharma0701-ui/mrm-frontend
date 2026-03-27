@@ -1,76 +1,56 @@
-import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { getImageUrl } from '../../app/config';
 import axiosInstance from '../../api/axiosInstance';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import RatingStars from '../../components/ui/RatingStars/RatingStars';
+import ProductSkeleton from '../../components/ui/ProductSkeleton/ProductSkeleton';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import './Collections.css'
+
+const collectionMapping = {
+  'pure-marble': 'marble',
+  'poshak-sringar': 'poshak',
+  'dust-murties': 'dust',
+  'kali-idols': 'kali'
+};
 
 export default function Collections() {
   const [searchParams] = useSearchParams()
   const type = searchParams.get('type')
-
-  const [products, setProducts] = useState([])
-  const [collections, setCollections] = useState([])
-  const [loading, setLoading] = useState(true)
+  const searchQuery = searchParams.get('search')
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const [productsRes, collectionsRes] = await Promise.all([
-          axiosInstance.get('/products'),
-          axiosInstance.get('/collections')
-        ])
-        setProducts(productsRes.data.data || [])
-        setCollections(collectionsRes.data.data || [])
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-
-    // Poll for updates every 10 seconds
-    const interval = setInterval(fetchData, 10000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const collectionMapping = {
-    'pure-marble': 'marble',
-    'poshak-sringar': 'poshak',
-    'dust-murties': 'dust',
-    'kali-idols': 'kali'
-  };
-
-  const searchQuery = searchParams.get('search')
-
-  const filteredProducts = products.filter(p => {
-    let matchesType = true;
-    let matchesSearch = true;
-
+  // Build API params for server-side filtering
+  const buildProductParams = () => {
+    const params = new URLSearchParams({ limit: 100 });
     if (type) {
       const normalizedType = type.toLowerCase().replace(/-collection$/, '');
       const targetCollection = collectionMapping[normalizedType] || normalizedType;
-      matchesType = (p.collection && p.collection.toLowerCase() === targetCollection) ||
-        (p.category && p.category.toLowerCase() === normalizedType);
+      params.append('collection', targetCollection);
     }
+    if (searchQuery) params.append('search', searchQuery);
+    return params.toString();
+  };
 
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      matchesSearch = (p.name && p.name.toLowerCase().includes(q)) ||
-        (p.category && p.category.toLowerCase().includes(q)) ||
-        (p.collection && p.collection.toLowerCase().includes(q));
-    }
-
-    return matchesType && matchesSearch;
+  // Fetch products with caching (stale for 2 min)
+  const { data: productsData, isLoading: productsLoading } = useQuery({
+    queryKey: ['products', type, searchQuery],
+    queryFn: () => axiosInstance.get(`/products?${buildProductParams()}`).then(r => r.data.data || []),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    placeholderData: [],
   });
+
+  // Fetch collections with caching (stale for 5 min, rarely changes)
+  const { data: collections = [] } = useQuery({
+    queryKey: ['collections'],
+    queryFn: () => axiosInstance.get('/collections').then(r => r.data.data || []),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const products = productsData || [];
 
   const categoryInfo = type
     ? collections.find(c => c.slug?.toLowerCase() === type.toLowerCase()) ||
@@ -87,11 +67,13 @@ export default function Collections() {
           <p>{categoryInfo?.description || 'Browse all collections'}</p>
         </div>
 
-        {loading ? (
-          <div className="flex justify-center p-10">Loading products...</div>
-        ) : filteredProducts.length > 0 ? (
+        {productsLoading ? (
           <div className="products-grid">
-            {filteredProducts.map(product => (
+            <ProductSkeleton count={8} />
+          </div>
+        ) : products.length > 0 ? (
+          <div className="products-grid">
+            {products.map(product => (
               <div key={product._id || product.id} className="product-card relative group">
                 <button
                   onClick={(e) => {
@@ -107,7 +89,7 @@ export default function Collections() {
 
                 <Link to={`/product/${product.slug}`} className="block">
                   <div className="product-image">
-                    <img src={getImageUrl(product.image)} alt={product.name} loading="lazy" decoding="async" />
+                    <img src={getImageUrl(product.image, 500)} alt={product.name} loading="lazy" decoding="async" />
                   </div>
                 </Link>
 
