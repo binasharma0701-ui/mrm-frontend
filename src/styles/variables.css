@@ -91,4 +91,6 @@
   --color-text: #F0F0F0;
   --color-text-light: #B0B0B0;
   --color-text-lighter: #808080;
+  /* Replace pure black in dark mode with a deep purple tone for accents/buttons */
+  --color-black: #3b1f4a;
 }
