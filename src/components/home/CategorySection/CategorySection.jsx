@@ -11,7 +11,10 @@ export default function CategorySection() {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get('/collections');
+        const response = await axiosInstance.get('/collections', {
+          headers: { 'Cache-Control': 'no-cache' },
+          params: { t: Date.now() }
+        });
         setCategories(response.data.data || []);
       } catch (error) {
         console.error('Failed to fetch collections:', error);
@@ -19,7 +22,11 @@ export default function CategorySection() {
         setLoading(false);
       }
     };
+
     fetchCategories();
+
+    window.addEventListener('focus', fetchCategories);
+    return () => window.removeEventListener('focus', fetchCategories);
   }, []);
 
   return (

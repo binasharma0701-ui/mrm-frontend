@@ -43,11 +43,17 @@ export default function Collections() {
     placeholderData: [],
   });
 
-  // Fetch collections with caching (stale for 5 min, rarely changes)
+  // Fetch collections in real time after CRM CRUD actions
   const { data: collections = [] } = useQuery({
     queryKey: ['collections'],
-    queryFn: () => axiosInstance.get('/collections').then(r => r.data.data || []),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    queryFn: () => axiosInstance.get('/collections', {
+      headers: { 'Cache-Control': 'no-cache' },
+      params: { t: Date.now() }
+    }).then(r => r.data.data || []),
+    staleTime: 0,
+    cacheTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   const products = productsData || [];
